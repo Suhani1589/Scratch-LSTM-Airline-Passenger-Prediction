@@ -1,65 +1,15 @@
-# Scratch LSTM for Airline Passenger Prediction
+# LSTM from Scratch
 
-## Overview
+Airline-passenger forecast with an LSTM cell written in PyTorch tensors and autograd. The notebook does not call `torch.nn.LSTM` or `torch.nn.LSTMCell`.
 
-This project implements an **LSTM (Long Short-Term Memory)** network completely from scratch using **PyTorch tensors and autograd**, without using `torch.nn.LSTM` or `torch.nn.LSTMCell`.
+Data is the seaborn `flights` series, scaled with `MinMaxScaler` to [0, 1]. Each example is 3 past months, and the target is the next month. The cell has 16 units.
 
-The model is trained on the Airline Passenger dataset to predict future passenger counts.
+The cell computes a forget gate, an input gate, a candidate cell, the cell update, an output gate, and the hidden state. Training uses Adam at learning rate 0.01 and mean squared error for 200 epochs. The saved log goes from loss 0.009010 at epoch 0 to 0.002948 at epoch 180. Predictions are inverse-transformed for `prediction.png`.
 
----
+## Run
 
-## Features
+```bash
+pip install torch numpy pandas matplotlib seaborn scikit-learn
+```
 
-- Manual Forget Gate
-- Manual Input Gate
-- Manual Candidate Cell State
-- Manual Cell State Update
-- Manual Output Gate
-- Manual Hidden State
-- Backpropagation using PyTorch Autograd
-- Airline Passenger Forecasting
-
----
-
-## LSTM Equations
-
-Forget Gate
-
-fₜ = σ(Wf xₜ + Uf hₜ₋₁ + bf)
-
-Input Gate
-
-iₜ = σ(Wi xₜ + Ui hₜ₋₁ + bi)
-
-Candidate Cell State
-
-c̃ₜ = tanh(Wc xₜ + Uc hₜ₋₁ + bc)
-
-Cell State
-
-cₜ = fₜ ⊙ cₜ₋₁ + iₜ ⊙ c̃ₜ
-
-Output Gate
-
-oₜ = σ(Wo xₜ + Uo hₜ₋₁ + bo)
-
-Hidden State
-
-hₜ = oₜ ⊙ tanh(cₜ)
-
----
-
-## Technologies
-
-- Python
-- PyTorch
-- NumPy
-- Pandas
-- Matplotlib
-- Scikit-learn
-
----
-
-## Results
-
-The manually implemented LSTM successfully learns the trend and seasonality of the Airline Passenger dataset.
+Open `scratch_lstm_airline_prediction.ipynb` and run it from the top. The optimizer cell must run before the 200-epoch loop.
